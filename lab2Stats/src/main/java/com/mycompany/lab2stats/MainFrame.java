@@ -3,8 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.lab2stats;
-
-import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -17,7 +15,7 @@ import javax.swing.JOptionPane;
  * @author annamutovkina
  */
 public class MainFrame extends javax.swing.JFrame {
-
+    Samples samp = new Samples();
     /**
      * Creates new form MainFrame
      */
@@ -36,6 +34,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jButtonLoadfile = new javax.swing.JButton();
+        jButtonCalcul = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -46,6 +45,13 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        jButtonCalcul.setText("Export statistics");
+        jButtonCalcul.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCalculActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -53,13 +59,17 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addComponent(jButtonLoadfile)
-                .addContainerGap(273, Short.MAX_VALUE))
+                .addGap(66, 66, 66)
+                .addComponent(jButtonCalcul)
+                .addContainerGap(78, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(54, 54, 54)
-                .addComponent(jButtonLoadfile)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonLoadfile)
+                    .addComponent(jButtonCalcul))
                 .addContainerGap(207, Short.MAX_VALUE))
         );
 
@@ -84,6 +94,7 @@ public class MainFrame extends javax.swing.JFrame {
 
             JFileChooser jFileChooser = new JFileChooser();
             jFileChooser.setCurrentDirectory(new File("."));
+            
             int resonse = jFileChooser.showOpenDialog(null);
             if(resonse == 0){
                 File file = new File(jFileChooser.getSelectedFile().getName());
@@ -91,9 +102,8 @@ public class MainFrame extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Выберите ДЗ4.xlsx!", "Ошибка!", JOptionPane.INFORMATION_MESSAGE);
                 }
                 else{
-                    ExcelProvider provider = new ExcelProvider();
                     try {
-                        provider.readFromXLSX(jFileChooser.getSelectedFile().getPath());
+                        ExcelProvider.readFromXLSX( jFileChooser.getSelectedFile().getPath(), samp);
                     } catch (IOException ex) {
                         Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -102,6 +112,17 @@ public class MainFrame extends javax.swing.JFrame {
             
           
     }//GEN-LAST:event_jButtonLoadfileActionPerformed
+
+    private void jButtonCalculActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCalculActionPerformed
+        try {
+            ExcelProvider.expotExcel(this.samp);
+            System.out.println("Successful export");
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "One more stupid error during export!", "Again(((", JOptionPane.INFORMATION_MESSAGE);
+        } catch (NullPointerException ex) {
+            JOptionPane.showMessageDialog(null, "Import smth you idiot!\nI have nothing to export", "Obey!", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_jButtonCalculActionPerformed
 
     /**
      * @param args the command line arguments
@@ -139,6 +160,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonCalcul;
     private javax.swing.JButton jButtonLoadfile;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
