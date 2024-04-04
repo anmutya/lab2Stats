@@ -35,6 +35,8 @@ public class ExcelProvider {
         calculateRow(sheet.getRow(1), samp.getSampleX());
         calculateRow(sheet.getRow(2), samp.getSampleY());
         calculateRow(sheet.getRow(3), samp.getSampleZ());
+         XSSFSheet sheet2 = wb.createSheet("Covariance Matrix");
+        covarianceMatrix(sheet2, samp.getSampleX(), samp.getSampleY(), samp.getSampleZ());
         try {
             wb.write(new FileOutputStream(new File("/Users/annamutovkina/Downloads/Calculations.xlsx")));
             wb.close();
@@ -52,7 +54,7 @@ public class ExcelProvider {
         row3.createCell(0).setCellValue("Z");
         String[] headers = new String[]{"Geometric Mean", "Mean", "Standard Deviation", 
             "Sample Size", "Number of Items", "Variance Coefficient", "Confidence Interval", 
-            "Variance", "Maximum", "Minimum", "Covariance XY", "Covariance XZ", "Covariance YZ"};
+            "Variance", "Maximum", "Minimum"};
         for (int i = 1; i < headers.length + 1; i++) {
             row.createCell(i).setCellValue(headers[i - 1]);
         } 
@@ -71,6 +73,33 @@ public class ExcelProvider {
         row.createCell(9).setCellValue(calc.calculateMax(array));
         row.createCell(10).setCellValue(calc.calculateMin(array));
    }
+   private static void covarianceMatrix(XSSFSheet sheet, ArrayList<Double> arrayX, ArrayList<Double> arrayY, ArrayList<Double> arrayZ){
+        Calculate calc = new Calculate();
+       String[] headers = new String[]{"X", "Y", "Z"};
+       XSSFRow row = sheet.createRow(0);
+       for (int i = 1; i < headers.length + 1; i++) {
+           row.createCell(i).setCellValue(headers[i - 1]);
+       }
+       for (int i = 1; i < headers.length + 1; i++) {
+           sheet.createRow(i).createCell(0).setCellValue(headers[i - 1]);
+           if(i ==1){
+               sheet.getRow(i).createCell(i).setCellValue(calc.calculateCovariation(arrayX, arrayX));
+               sheet.getRow(i).createCell(2).setCellValue(calc.calculateCovariation(arrayX, arrayY));
+               sheet.getRow(i).createCell(3).setCellValue(calc.calculateCovariation(arrayX, arrayZ));
+           }
+           else if(i == 2){
+               sheet.getRow(i).createCell(i).setCellValue(calc.calculateCovariation(arrayY, arrayY));
+               sheet.getRow(2).createCell(1).setCellValue(calc.calculateCovariation(arrayY, arrayX));
+               sheet.getRow(2).createCell(3).setCellValue(calc.calculateCovariation(arrayY, arrayZ));
+           }
+           else {
+               sheet.getRow(i).createCell(2).setCellValue(calc.calculateCovariation(arrayZ, arrayY));
+               sheet.getRow(3).createCell(1).setCellValue(calc.calculateCovariation(arrayZ, arrayX));
+               sheet.getRow(3).createCell(3).setCellValue(calc.calculateCovariation(arrayZ, arrayZ));
+           }
+
+       }
+    }
    
   
 }

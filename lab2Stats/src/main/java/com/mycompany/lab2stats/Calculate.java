@@ -51,13 +51,14 @@ public class Calculate {
         return calculateSd(array) / calculateMean(array);
     }
     public double calculateCovariation(ArrayList<Double> array, ArrayList<Double> array2) {
+        Covariance cov = new Covariance();
         double[] x = new double[array.size()];
         double[] y = new double[array2.size()];
         for (int i = 0; i < array.size(); i++) {
             x[i] = array.get(i);
             y[i] = array2.get(i);
         }
-        return new Covariance().covariance(x, y);
+        return cov.covariance(x, y);
     }
 
     public double[] calculateConfidenceInterval(ArrayList<Double> array) {

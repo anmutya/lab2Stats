@@ -24,9 +24,9 @@ public class Samples {
             sampleX.add(row.getCell(0).getNumericCellValue());
             sampleY.add(row.getCell(1).getNumericCellValue());
             sampleZ.add(row.getCell(2).getNumericCellValue());
-            
         }
     }
+ 
     public ArrayList<Double> getSampleX() {
           return this.sampleX;
     }
@@ -34,7 +34,7 @@ public class Samples {
         return this.sampleY;
     }
     public ArrayList<Double> getSampleZ() {
-        return this.sampleX;
+        return this.sampleZ;
     }
 
 }
