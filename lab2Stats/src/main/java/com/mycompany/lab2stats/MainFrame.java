@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import org.apache.commons.math3.exception.MathIllegalArgumentException;
 
 /**
  *
@@ -134,7 +135,7 @@ public class MainFrame extends javax.swing.JFrame {
             System.out.println("Successful export");
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "One more stupid error during export!", "Again(((", JOptionPane.INFORMATION_MESSAGE);
-        } catch (NullPointerException ex) {
+        } catch (MathIllegalArgumentException ex) {
             JOptionPane.showMessageDialog(null, "Import smth you idiot!\nI have nothing to export", "Obey!", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_jButtonCalculActionPerformed
