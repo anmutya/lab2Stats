@@ -44,13 +44,13 @@ public class Calculate {
     public Integer calculateLenght(ArrayList<Double> array) {
         return array.size();
     }
-    public double calculateScope(ArrayList<Double> array){
+    public Double calculateScope(ArrayList<Double> array){
         return calculateMax(array) - calculateMin(array);
     }
-      public double calculateVarianceСoefficient(ArrayList<Double> array){
+      public Double calculateVarianceСoefficient(ArrayList<Double> array){
         return calculateSd(array) / calculateMean(array);
     }
-    public double calculateCovariation(ArrayList<Double> array, ArrayList<Double> array2) {
+    public Double calculateCovariation(ArrayList<Double> array, ArrayList<Double> array2) {
         Covariance cov = new Covariance();
         double[] x = new double[array.size()];
         double[] y = new double[array2.size()];

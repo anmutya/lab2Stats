@@ -89,13 +89,13 @@ public class ExcelProvider {
            }
            else if(i == 2){
                sheet.getRow(i).createCell(i).setCellValue(calc.calculateCovariation(arrayY, arrayY));
-               sheet.getRow(2).createCell(1).setCellValue(calc.calculateCovariation(arrayY, arrayX));
-               sheet.getRow(2).createCell(3).setCellValue(calc.calculateCovariation(arrayY, arrayZ));
+               sheet.getRow(i).createCell(1).setCellValue(calc.calculateCovariation(arrayY, arrayX));
+               sheet.getRow(i).createCell(3).setCellValue(calc.calculateCovariation(arrayY, arrayZ));
            }
            else {
                sheet.getRow(i).createCell(2).setCellValue(calc.calculateCovariation(arrayZ, arrayY));
-               sheet.getRow(3).createCell(1).setCellValue(calc.calculateCovariation(arrayZ, arrayX));
-               sheet.getRow(3).createCell(3).setCellValue(calc.calculateCovariation(arrayZ, arrayZ));
+               sheet.getRow(i).createCell(1).setCellValue(calc.calculateCovariation(arrayZ, arrayX));
+               sheet.getRow(i).createCell(3).setCellValue(calc.calculateCovariation(arrayZ, arrayZ));
            }
 
        }

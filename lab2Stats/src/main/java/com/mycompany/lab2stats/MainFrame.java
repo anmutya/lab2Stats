@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
  * @author annamutovkina
  */
 public class MainFrame extends javax.swing.JFrame {
-    Samples samp = new Samples();
+    private Samples samp = new Samples();
     /**
      * Creates new form MainFrame
      */
