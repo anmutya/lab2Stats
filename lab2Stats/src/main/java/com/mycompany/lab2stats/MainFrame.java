@@ -17,6 +17,7 @@ import org.apache.commons.math3.exception.MathIllegalArgumentException;
  */
 public class MainFrame extends javax.swing.JFrame {
     private Samples samp = new Samples();
+    private Manager manager = new Manager();
     /**
      * Creates new form MainFrame
      */
@@ -118,25 +119,18 @@ public class MainFrame extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Выберите ДЗ4.xlsx!", "Ошибка!", JOptionPane.INFORMATION_MESSAGE);
                 }
                 else{
-                    try {
-                        ExcelProvider.readFromXLSX( jFileChooser.getSelectedFile().getPath(), samp);
-                    } catch (IOException ex) {
-                        Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    manager.importExcel(jFileChooser.getSelectedFile().getPath());
                 }
-            }
-            
+            }  
           
     }//GEN-LAST:event_jButtonLoadfileActionPerformed
 
     private void jButtonCalculActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCalculActionPerformed
         try {
-            ExcelProvider.expotExcel(this.samp);
+            manager.exportFile();
             System.out.println("Successful export");
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "One more stupid error during export!", "Again(((", JOptionPane.INFORMATION_MESSAGE);
         } catch (MathIllegalArgumentException ex) {
-            JOptionPane.showMessageDialog(null, "Import smth you idiot!\nI have nothing to export", "Obey!", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Import smth!\nI have nothing to export", "Obey!", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_jButtonCalculActionPerformed
 

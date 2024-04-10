@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -21,22 +22,43 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class ExcelProvider {
 
-    public static void readFromXLSX(String path, Samples samp) throws IOException {
+    public ArrayList<ArrayList<Double>> readFromXLSX(String path) throws IOException {
+        ArrayList<ArrayList<Double>> data = new ArrayList<>();
         try (XSSFWorkbook myExcelFWorkbook = new XSSFWorkbook(path)) {
             XSSFSheet myExcelSheet = myExcelFWorkbook.getSheet("Вариант 1");
-            samp.importToArrays(myExcelSheet);
+
+            int numRows = myExcelSheet.getPhysicalNumberOfRows();
+            int numCols = myExcelSheet.getRow(0).getLastCellNum();
+
+            for (int col = 0; col < numCols; col++) {
+                ArrayList<Double> columnData = new ArrayList<>();
+                for (int row = 1; row < numRows; row++) {
+                    XSSFRow currentRow = myExcelSheet.getRow(row);
+                    if (currentRow != null) {
+                        XSSFCell cell = currentRow.getCell(col);
+                        if (cell != null) {
+                            columnData.add(cell.getNumericCellValue());
+                        } else {
+                            columnData.add(0.0);
+                        }
+                    }
+                }
+                data.add(columnData);
+            }
             myExcelFWorkbook.close();
         }
+        return data;
     }
-    public static void expotExcel(Samples samp) throws IOException{
+
+    public void expotExcel(ArrayList<ArrayList<Double>> stats) throws IOException{
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet("Calculations");
         craateTitles(sheet);
-        calculateRow(sheet.getRow(1), samp.getSampleX());
-        calculateRow(sheet.getRow(2), samp.getSampleY());
-        calculateRow(sheet.getRow(3), samp.getSampleZ());
-         XSSFSheet sheet2 = wb.createSheet("Covariance Matrix");
-        covarianceMatrix(sheet2, samp.getSampleX(), samp.getSampleY(), samp.getSampleZ());
+        addStatsToRow(sheet.getRow(1), stats.get(0));
+        addStatsToRow(sheet.getRow(2), stats.get(1));
+        addStatsToRow(sheet.getRow(3), stats.get(2));
+        XSSFSheet sheet2 = wb.createSheet("Covariance Matrix");
+        covarianceMatrix(sheet2, stats);
         try {
             wb.write(new FileOutputStream(new File("/Users/annamutovkina/Downloads/Calculations.xlsx")));
             wb.close();
@@ -44,7 +66,7 @@ public class ExcelProvider {
             Logger.getLogger(ExcelProvider.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    private static void craateTitles(XSSFSheet sheet){
+    private void craateTitles(XSSFSheet sheet){
         XSSFRow row = sheet.createRow(0);
         XSSFRow row1 = sheet.createRow(1);
         XSSFRow row2 = sheet.createRow(2);
@@ -53,53 +75,35 @@ public class ExcelProvider {
         row2.createCell(0).setCellValue("Y");
         row3.createCell(0).setCellValue("Z");
         String[] headers = new String[]{"Geometric Mean", "Mean", "Standard Deviation", 
-            "Sample Size", "Number of Items", "Variance Coefficient", "Confidence Interval", 
+            "Sample Size", "Number of Items", "Variance Coefficient", "Lower Confidence Bound", "Upper Confidence Bound", 
             "Variance", "Maximum", "Minimum"};
         for (int i = 1; i < headers.length + 1; i++) {
             row.createCell(i).setCellValue(headers[i - 1]);
         } 
 
     }
-    private static void calculateRow(XSSFRow row, ArrayList<Double> array){
-        Calculate calc = new Calculate();
-        row.createCell(1).setCellValue(calc.calculateGeomMean(array));
-        row.createCell(2).setCellValue(calc.calculateMean(array));
-        row.createCell(3).setCellValue(calc.calculateSd(array));
-        row.createCell(4).setCellValue(calc.calculateScope(array));
-        row.createCell(5).setCellValue(calc.calculateLenght(array));
-        row.createCell(6).setCellValue(calc.calculateVarianceСoefficient(array));
-        row.createCell(7).setCellValue("(" + calc.calculateConfidenceInterval(array)[0] + ";" + calc.calculateConfidenceInterval(array)[1] + ")");
-        row.createCell(8).setCellValue(calc.calculateVariance(array));
-        row.createCell(9).setCellValue(calc.calculateMax(array));
-        row.createCell(10).setCellValue(calc.calculateMin(array));
+    private void addStatsToRow(XSSFRow row, ArrayList<Double> array){
+        for(int i = 1; i<array.size()-2; i++){
+            row.createCell(i).setCellValue(array.get(i-1));
+        }
+        
    }
-   private static void covarianceMatrix(XSSFSheet sheet, ArrayList<Double> arrayX, ArrayList<Double> arrayY, ArrayList<Double> arrayZ){
-        Calculate calc = new Calculate();
+   private static void covarianceMatrix(XSSFSheet sheet, ArrayList<ArrayList<Double>> stats){
        String[] headers = new String[]{"X", "Y", "Z"};
        XSSFRow row = sheet.createRow(0);
-       for (int i = 1; i < headers.length + 1; i++) {
+       for (int i = 1; i <= headers.length; i++) {
+           sheet.createRow(i).createCell(0).setCellValue(headers[i - 1]);
+       }
+       for (int i = 1; i <= headers.length; i++) {
            row.createCell(i).setCellValue(headers[i - 1]);
        }
-       for (int i = 1; i < headers.length + 1; i++) {
-           sheet.createRow(i).createCell(0).setCellValue(headers[i - 1]);
-           if(i ==1){
-               sheet.getRow(i).createCell(i).setCellValue(calc.calculateCovariation(arrayX, arrayX));
-               sheet.getRow(i).createCell(2).setCellValue(calc.calculateCovariation(arrayX, arrayY));
-               sheet.getRow(i).createCell(3).setCellValue(calc.calculateCovariation(arrayX, arrayZ));
+       for(int i = 1; i <= headers.length; i++){
+           int arrayNumber = i-1;
+           for(int j = 1; j<= headers.length; j++){
+               int indexInArrayNumber = 10 + j;
+               sheet.getRow(i).createCell(j).setCellValue(stats.get(arrayNumber).get(indexInArrayNumber));
            }
-           else if(i == 2){
-               sheet.getRow(i).createCell(i).setCellValue(calc.calculateCovariation(arrayY, arrayY));
-               sheet.getRow(i).createCell(1).setCellValue(calc.calculateCovariation(arrayY, arrayX));
-               sheet.getRow(i).createCell(3).setCellValue(calc.calculateCovariation(arrayY, arrayZ));
-           }
-           else {
-               sheet.getRow(i).createCell(2).setCellValue(calc.calculateCovariation(arrayZ, arrayY));
-               sheet.getRow(i).createCell(1).setCellValue(calc.calculateCovariation(arrayZ, arrayX));
-               sheet.getRow(i).createCell(3).setCellValue(calc.calculateCovariation(arrayZ, arrayZ));
-           }
-
        }
+       
     }
-   
-  
 }

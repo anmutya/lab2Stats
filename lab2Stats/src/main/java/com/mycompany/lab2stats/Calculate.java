@@ -23,34 +23,34 @@ public class Calculate {
         }
         return stats;
     }
-    public Double calculateGeomMean(ArrayList<Double> array) {
+    private Double calculateGeomMean(ArrayList<Double> array) {
         return addToDescroptoinStat(array).getGeometricMean();
     }
-    public Double calculateMean(ArrayList<Double> array) {
+    private Double calculateMean(ArrayList<Double> array) {
         return addToDescroptoinStat(array).getMean();
     }
-    public Double calculateVariance(ArrayList<Double> array) {
+    private Double calculateVariance(ArrayList<Double> array) {
         return addToDescroptoinStat(array).getVariance();
     }
-    public Double calculateSd(ArrayList<Double> array) {
+    private Double calculateSd(ArrayList<Double> array) {
       return addToDescroptoinStat(array).getStandardDeviation();
     }
-    public Double calculateMin(ArrayList<Double> array) {
+    private Double calculateMin(ArrayList<Double> array) {
         return addToDescroptoinStat(array).getMin();
     }
-    public Double calculateMax(ArrayList<Double> array) {
+    private Double calculateMax(ArrayList<Double> array) {
         return addToDescroptoinStat(array).getMax();
     }
-    public Integer calculateLenght(ArrayList<Double> array) {
+    private Integer calculateLenght(ArrayList<Double> array) {
         return array.size();
     }
-    public Double calculateScope(ArrayList<Double> array){
+    private Double calculateScope(ArrayList<Double> array){
         return calculateMax(array) - calculateMin(array);
     }
-      public Double calculateVarianceСoefficient(ArrayList<Double> array){
+    private Double calculateVarianceСoefficient(ArrayList<Double> array){
         return calculateSd(array) / calculateMean(array);
     }
-    public Double calculateCovariation(ArrayList<Double> array, ArrayList<Double> array2) {
+    private Double calculateCovariation(ArrayList<Double> array, ArrayList<Double> array2) {
         Covariance cov = new Covariance();
         double[] x = new double[array.size()];
         double[] y = new double[array2.size()];
@@ -61,7 +61,7 @@ public class Calculate {
         return cov.covariance(x, y);
     }
 
-    public double[] calculateConfidenceInterval(ArrayList<Double> array) {
+    private double[] calculateConfidenceInterval(ArrayList<Double> array) {
         double mean = calculateMean(array);
         double sd = calculateSd(array);
         NormalDistribution normalDistribution = new NormalDistribution();
@@ -71,6 +71,34 @@ public class Calculate {
         double lowerBound = mean - z * sd / Math.sqrt(sampleSize);
         double upperBound = mean + z * sd / Math.sqrt(sampleSize);
         return new double[]{lowerBound,upperBound};
+    }
+    public ArrayList<ArrayList<Double>> addStatisticToList(ArrayList<ArrayList<Double>> array) {
+        ArrayList<ArrayList<Double>> stats = new ArrayList();
+        for (int i = 0; i < array.size(); i++) {
+             ArrayList<Double> currentStats = new ArrayList<>();
+             currentStats.add(calculateGeomMean(array.get(i)));
+             currentStats.add(calculateMean(array.get(i)));
+             currentStats.add(calculateSd(array.get(i)));
+             currentStats.add(calculateScope(array.get(i)));
+             currentStats.add(calculateLenght(array.get(i)).doubleValue());
+             currentStats.add(calculateVarianceСoefficient(array.get(i)));
+             currentStats.add(calculateConfidenceInterval(array.get(i))[0]);
+             currentStats.add(calculateConfidenceInterval(array.get(i))[1]);
+             currentStats.add(calculateVariance(array.get(i)));
+             currentStats.add(calculateMax(array.get(i)));
+             currentStats.add(calculateMin(array.get(i)));
+             for(int j = 0; j < array.size(); j++){
+                 currentStats.add(calculateCovariation(array.get(i), array.get(j)));
+                 
+             }
+//            for (int j = 0; j < currentStats.size(); j++) {
+//                System.out.println(currentStats.get(j));
+//
+//            }
+             
+        stats.add(currentStats);
+        }
+        return stats;
     }
     
 }
