@@ -7,7 +7,7 @@
 *.iml
 *.iws
 
-.DS_Store
+*DS_Store*
 
 log/
 target/
