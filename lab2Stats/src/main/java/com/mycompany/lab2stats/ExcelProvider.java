@@ -87,7 +87,7 @@ public class ExcelProvider {
             row.createCell(i).setCellValue(array.get(i-1));
         }
    }
-   private static void covarianceMatrix(XSSFSheet sheet, ArrayList<ArrayList<Double>> stats){
+   private void covarianceMatrix(XSSFSheet sheet, ArrayList<ArrayList<Double>> stats){
        String[] headers = new String[]{"X", "Y", "Z"};
        XSSFRow row = sheet.createRow(0);
        for (int i = 1; i <= headers.length; i++) {
