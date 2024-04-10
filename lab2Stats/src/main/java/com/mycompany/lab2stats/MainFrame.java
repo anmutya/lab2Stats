@@ -4,9 +4,6 @@
  */
 package com.mycompany.lab2stats;
 import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import org.apache.commons.math3.exception.MathIllegalArgumentException;
@@ -16,11 +13,8 @@ import org.apache.commons.math3.exception.MathIllegalArgumentException;
  * @author annamutovkina
  */
 public class MainFrame extends javax.swing.JFrame {
-    private Samples samp = new Samples();
     private Manager manager = new Manager();
-    /**
-     * Creates new form MainFrame
-     */
+
     public MainFrame() {
         initComponents();
     }

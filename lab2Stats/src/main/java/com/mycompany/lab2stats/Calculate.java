@@ -75,30 +75,26 @@ public class Calculate {
     public ArrayList<ArrayList<Double>> addStatisticToList(ArrayList<ArrayList<Double>> array) {
         ArrayList<ArrayList<Double>> stats = new ArrayList();
         for (int i = 0; i < array.size(); i++) {
-             ArrayList<Double> currentStats = new ArrayList<>();
-             currentStats.add(calculateGeomMean(array.get(i)));
-             currentStats.add(calculateMean(array.get(i)));
-             currentStats.add(calculateSd(array.get(i)));
-             currentStats.add(calculateScope(array.get(i)));
-             currentStats.add(calculateLenght(array.get(i)).doubleValue());
-             currentStats.add(calculateVarianceСoefficient(array.get(i)));
-             currentStats.add(calculateConfidenceInterval(array.get(i))[0]);
-             currentStats.add(calculateConfidenceInterval(array.get(i))[1]);
-             currentStats.add(calculateVariance(array.get(i)));
-             currentStats.add(calculateMax(array.get(i)));
-             currentStats.add(calculateMin(array.get(i)));
-             for(int j = 0; j < array.size(); j++){
-                 currentStats.add(calculateCovariation(array.get(i), array.get(j)));
-                 
-             }
-//            for (int j = 0; j < currentStats.size(); j++) {
-//                System.out.println(currentStats.get(j));
-//
-//            }
-             
-        stats.add(currentStats);
+            ArrayList<Double> currentStats = new ArrayList<>();
+            currentStats.add(calculateGeomMean(array.get(i)));
+            currentStats.add(calculateMean(array.get(i)));
+            currentStats.add(calculateSd(array.get(i)));
+            currentStats.add(calculateScope(array.get(i)));
+            currentStats.add(calculateLenght(array.get(i)).doubleValue());
+            currentStats.add(calculateVarianceСoefficient(array.get(i)));
+            currentStats.add(calculateConfidenceInterval(array.get(i))[0]);
+            currentStats.add(calculateConfidenceInterval(array.get(i))[1]);
+            currentStats.add(calculateVariance(array.get(i)));
+            currentStats.add(calculateMax(array.get(i)));
+            currentStats.add(calculateMin(array.get(i)));
+            for (int j = 0; j < array.size(); j++) {
+                currentStats.add(calculateCovariation(array.get(i), array.get(j)));
+
+            }
+
+            stats.add(currentStats);
         }
         return stats;
     }
-    
+
 }
