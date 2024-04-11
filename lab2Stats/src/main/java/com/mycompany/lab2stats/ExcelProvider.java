@@ -22,10 +22,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class ExcelProvider {
 
-    public ArrayList<ArrayList<Double>> readFromXLSX(String path) throws IOException {
+    public ArrayList<ArrayList<Double>> readFromXLSX(String path, int index) throws IOException {
         ArrayList<ArrayList<Double>> data = new ArrayList<>();
         try (XSSFWorkbook myExcelFWorkbook = new XSSFWorkbook(path)) {
-            XSSFSheet myExcelSheet = myExcelFWorkbook.getSheetAt(0);
+            XSSFSheet myExcelSheet = myExcelFWorkbook.getSheetAt(index);
 
             int numRows = myExcelSheet.getPhysicalNumberOfRows();
             int numCols = myExcelSheet.getRow(0).getLastCellNum();

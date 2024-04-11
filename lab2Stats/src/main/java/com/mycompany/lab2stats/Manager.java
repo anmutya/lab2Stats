@@ -17,9 +17,9 @@ public class Manager {
     private Samples samples = new Samples();
     private Calculate calculator = new Calculate();
     private ExcelProvider provider = new ExcelProvider();
-    public void importExcel(String path){
+    public void importExcel(String path, int index){
         try {
-            ArrayList<ArrayList<Double>> list = provider.readFromXLSX(path);
+            ArrayList<ArrayList<Double>> list = provider.readFromXLSX(path,index);
             this.samples.setSamples(list);
         } catch (IOException ex) {
             Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);

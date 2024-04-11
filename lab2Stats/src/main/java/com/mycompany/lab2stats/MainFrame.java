@@ -7,6 +7,7 @@ package com.mycompany.lab2stats;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.math3.exception.MathIllegalArgumentException;
 
 /**
@@ -15,6 +16,7 @@ import org.apache.commons.math3.exception.MathIllegalArgumentException;
  */
 public class MainFrame extends javax.swing.JFrame {
     private Manager manager = new Manager();
+    private JFileChooser jFileChooser = new JFileChooser();
 
     public MainFrame() {
         initComponents();
@@ -29,10 +31,15 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jButtonLoadfile = new javax.swing.JButton();
         jButtonCalcul = new javax.swing.JButton();
         jButtonExit = new javax.swing.JButton();
+        jLabelInputIndex = new javax.swing.JLabel();
+        jTextIndexSheet = new javax.swing.JTextField();
+
+        jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -57,21 +64,38 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        jLabelInputIndex.setVisible(false);
+        jLabelInputIndex.setText("Введите индекс страницы");
+
+        jTextIndexSheet.setVisible(false);
+        jTextIndexSheet.setColumns(3);
+        jTextIndexSheet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextIndexSheetActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(42, 42, 42)
-                        .addComponent(jButtonLoadfile)
-                        .addGap(55, 55, 55)
-                        .addComponent(jButtonCalcul))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(136, 136, 136)
-                        .addComponent(jButtonExit)))
+                .addGap(42, 42, 42)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButtonExit)
+                    .addComponent(jButtonLoadfile))
+                .addGap(55, 55, 55)
+                .addComponent(jButtonCalcul)
                 .addContainerGap(82, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabelInputIndex)
+                        .addGap(29, 29, 29))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jTextIndexSheet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(89, 89, 89))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -80,9 +104,13 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonLoadfile)
                     .addComponent(jButtonCalcul))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 102, Short.MAX_VALUE)
+                .addGap(61, 61, 61)
                 .addComponent(jButtonExit)
-                .addGap(78, 78, 78))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addComponent(jLabelInputIndex)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jTextIndexSheet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(57, 57, 57))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -104,20 +132,18 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void jButtonLoadfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLoadfileActionPerformed
 
-            JFileChooser jFileChooser = new JFileChooser();
             jFileChooser.setCurrentDirectory(new File("."));
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("Microsoft Excel Files", "xlsx");
+            jFileChooser.setFileFilter(filter);
             
             int resonse = jFileChooser.showOpenDialog(null);
+
             if(resonse == 0){
                 File file = new File(jFileChooser.getSelectedFile().getName());
-                if(!file.getName().equals("ДЗ4.xlsx")){
-                    JOptionPane.showMessageDialog(null, "Выберите ДЗ4.xlsx!", "Ошибка!", JOptionPane.INFORMATION_MESSAGE);
                 }
-                else{
-                    manager.importExcel(jFileChooser.getSelectedFile().getPath());
-                }
-            }  
-          
+            jLabelInputIndex.setVisible(true);
+            jTextIndexSheet.setVisible(true);
+                      
     }//GEN-LAST:event_jButtonLoadfileActionPerformed
 
     private void jButtonCalculActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCalculActionPerformed
@@ -132,6 +158,10 @@ public class MainFrame extends javax.swing.JFrame {
     private void jButtonExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExitActionPerformed
         System.exit(0);
     }//GEN-LAST:event_jButtonExitActionPerformed
+
+    private void jTextIndexSheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextIndexSheetActionPerformed
+        manager.importExcel(jFileChooser.getSelectedFile().getPath(), Integer.parseInt(jTextIndexSheet.getText()));
+    }//GEN-LAST:event_jTextIndexSheetActionPerformed
 
     /**
      * @param args the command line arguments
@@ -169,9 +199,12 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonCalcul;
     private javax.swing.JButton jButtonExit;
     private javax.swing.JButton jButtonLoadfile;
+    private javax.swing.JLabel jLabelInputIndex;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField jTextIndexSheet;
     // End of variables declaration//GEN-END:variables
 }
