@@ -21,13 +21,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  * @author annamutovkina
  */
 public class ExcelProvider {
-
-    public ArrayList<ArrayList<Double>> readFromXLSX(String path, int index) throws IOException {
+    private ArrayList<ArrayList<Double>> exportSheetToList(XSSFSheet myExcelSheet){
         ArrayList<ArrayList<Double>> data = new ArrayList<>();
-        try (XSSFWorkbook myExcelFWorkbook = new XSSFWorkbook(path)) {
-            XSSFSheet myExcelSheet = myExcelFWorkbook.getSheetAt(index);
-
-            int numRows = myExcelSheet.getPhysicalNumberOfRows();
+         int numRows = myExcelSheet.getPhysicalNumberOfRows();
             int numCols = myExcelSheet.getRow(0).getLastCellNum();
 
             for (int col = 0; col < numCols; col++) {
@@ -44,13 +40,29 @@ public class ExcelProvider {
                     }
                 }
                 data.add(columnData);
-            }
+        }
+            return data;
+    }
+    public ArrayList<ArrayList<Double>> readSheetFromXLSX(String path, int index) throws IOException {
+         ArrayList<ArrayList<Double>> data = new ArrayList<>();
+        try (XSSFWorkbook myExcelFWorkbook = new XSSFWorkbook(path)) {
+            XSSFSheet myExcelSheet = myExcelFWorkbook.getSheetAt(index-1);
+            data = exportSheetToList(myExcelSheet);
             myExcelFWorkbook.close();
         }
         return data;
     }
+     public ArrayList<ArrayList<Double>> readSheetFromXLSX(String path, String nameSheet) throws IOException{
+        ArrayList<ArrayList<Double>> data = new ArrayList<>();
+        try (XSSFWorkbook myExcelFWorkbook = new XSSFWorkbook(path)) {
+            XSSFSheet myExcelSheet = myExcelFWorkbook.getSheet(nameSheet);
+            data = exportSheetToList(myExcelSheet);
+            myExcelFWorkbook.close();
+        }
+        return data;
+     }
 
-    public void expotExcel(ArrayList<ArrayList<Double>> stats) throws IOException{
+    public void expotExcel(ArrayList<ArrayList<Double>> stats, ArrayList<ArrayList<Double>> cov ) throws IOException{
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet("Calculations");
         craateTitles(sheet, stats);
@@ -58,7 +70,7 @@ public class ExcelProvider {
             addStatsToRow(sheet.getRow(i), stats.get(i-1));
         }
         XSSFSheet sheet2 = wb.createSheet("Covariance Matrix");
-        covarianceMatrix(sheet2, stats);
+        covarianceMatrix(sheet2, cov);
         try {
             wb.write(new FileOutputStream(new File("./Calculations.xlsx")));
             wb.close();
@@ -77,13 +89,13 @@ public class ExcelProvider {
             "Sample Size", "Number of Items", "Variance Coefficient", "Lower Confidence Bound", "Upper Confidence Bound", 
             "Variance", "Maximum", "Minimum"};
         XSSFRow row = sheet.createRow(0);
-        for (int i = 1; i < headers.length + 1; i++) {
+        for (int i = 1; i <= headers.length; i++) {
             row.createCell(i).setCellValue(headers[i - 1]);
         } 
 
     }
     private void addStatsToRow(XSSFRow row, ArrayList<Double> array){
-        for(int i = 1; i<array.size()-2; i++){
+        for(int i = 1; i<=array.size(); i++){
             row.createCell(i).setCellValue(array.get(i-1));
         }
    }
@@ -98,7 +110,7 @@ public class ExcelProvider {
        for(int i = 1; i <= stats.size(); i++){
            int arrayNumber = i-1;
            for(int j = 1; j<= stats.size(); j++){
-               int indexInArrayNumber = 10 + j;
+               int indexInArrayNumber =  j-1;
                sheet.getRow(i).createCell(j).setCellValue(stats.get(arrayNumber).get(indexInArrayNumber));
            }
        }

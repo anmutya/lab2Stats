@@ -15,7 +15,7 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
  *
  * @author annamutovkina
  */
-public class Calculate {
+public class Calculator {
     private DescriptiveStatistics addToDescroptoinStat(ArrayList<Double> data){
         DescriptiveStatistics stats = new DescriptiveStatistics();
         for (Double value : data) {
@@ -87,14 +87,22 @@ public class Calculate {
             currentStats.add(calculateVariance(array.get(i)));
             currentStats.add(calculateMax(array.get(i)));
             currentStats.add(calculateMin(array.get(i)));
-            for (int j = 0; j < array.size(); j++) {
-                currentStats.add(calculateCovariation(array.get(i), array.get(j)));
-
-            }
-
             stats.add(currentStats);
         }
         return stats;
     }
+     public ArrayList<ArrayList<Double>> addCovToList(ArrayList<ArrayList<Double>> array) {
+         ArrayList<ArrayList<Double>> stats = new ArrayList();
+         for(int i = 0; i< array.size(); i++){
+              ArrayList<Double> currentStats = new ArrayList<>();
+             for(int j = 0; j< array.size(); j++){
+ 
+                 currentStats.add(calculateCovariation(array.get(i), array.get(j)));
+             }
+             stats.add(currentStats);
+         }
+         return stats;
+     }
+    
 
 }

@@ -4,6 +4,7 @@
  */
 package com.mycompany.lab2stats;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -15,22 +16,30 @@ import java.util.logging.Logger;
  */
 public class Manager {
     private Samples samples = new Samples();
-    private Calculate calculator = new Calculate();
+    private Calculator calculator = new Calculator();
     private ExcelProvider provider = new ExcelProvider();
-    public void importExcel(String path, int index){
+    private File file;
+    public void importExcel(String path, String name) throws IOException{
+        ArrayList<ArrayList<Double>> list = provider.readSheetFromXLSX(path,name);
+        this.samples.setSamples(list);
+    }
+    public void importExcel(String path, int index) throws IOException{
+        ArrayList<ArrayList<Double>> list = provider.readSheetFromXLSX(path,index);
+        this.samples.setSamples(list);
+    }
+    public void exportFile(){
+        ArrayList<ArrayList<Double>> stats = calculator.addStatisticToList(samples.getSamples());
+        ArrayList<ArrayList<Double>> cov = calculator.addCovToList(samples.getSamples());
         try {
-            ArrayList<ArrayList<Double>> list = provider.readFromXLSX(path,index);
-            this.samples.setSamples(list);
+            provider.expotExcel(stats, cov);
         } catch (IOException ex) {
             Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public void exportFile(){
-        ArrayList<ArrayList<Double>> stats = calculator.addStatisticToList(samples.getSamples());
-        try {
-            provider.expotExcel(stats);
-        } catch (IOException ex) {
-            Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void setFile(File file){
+        this.file = file;
+    }
+    public File getFile(){
+        return file;
     }
 }
