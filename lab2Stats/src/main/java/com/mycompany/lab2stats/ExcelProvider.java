@@ -65,8 +65,9 @@ public class ExcelProvider {
     public void expotExcel(ArrayList<ArrayList<Double>> stats, ArrayList<ArrayList<Double>> cov ) throws IOException{
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet("Calculations");
-        craateTitles(sheet, stats);
-        for(int i = 1; i <= stats.size(); i++){
+        int stats_size = stats.size();
+        craateTitles(sheet, stats_size);
+        for(int i = 1; i <= stats_size; i++){
             addStatsToRow(sheet.getRow(i), stats.get(i-1));
         }
         XSSFSheet sheet2 = wb.createSheet("Covariance Matrix");
@@ -78,9 +79,9 @@ public class ExcelProvider {
             Logger.getLogger(ExcelProvider.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    private void craateTitles(XSSFSheet sheet, ArrayList<ArrayList<Double>> stats){
+    private void craateTitles(XSSFSheet sheet, int stats){
 
-        for(int i = 1; i <= stats.size() ; i++){
+        for(int i = 1; i <= stats ; i++){
             XSSFRow row = sheet.createRow(i);
             XSSFCell cell = row.createCell(0);
             cell.setCellValue("Выборка " + i);
